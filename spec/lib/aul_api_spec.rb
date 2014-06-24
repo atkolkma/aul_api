@@ -1,4 +1,7 @@
 require 'aul_api'
+require 'yaml'
+fixtures = YAML::load_file(File.join(__dir__, 'fixtures.yml'))
+credentials = YAML::load_file(File.join(__dir__, 'credentials.yml'))
 
 describe AutoUplink do
 
