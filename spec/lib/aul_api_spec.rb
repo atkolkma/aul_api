@@ -15,14 +15,17 @@ describe AutoUplink do
 	end
 
 	it "can log into AUL given working credentials" do
-		expect(AutoUplink.new.login(user_name, password).uri.to_s).to eq("http://services.autouplinktech.com/admin/mainoptions.cfm")
-		expect(AutoUplink.new.login("bad_username", "useless_password").uri.to_s).to eq("http://services.autouplinktech.com/login.cfm")
+		# .uri.to_s doesn't work here. You must search meta tag to get the redirected page.
+		expect(AutoUplink.new.login(user_name, password).search('meta').to_s.include?("http://services.autouplinktech.com/admin/mainoptions.cfm")).to be true
+		expect(AutoUplink.new.login("bad_username", "useless_password").search('meta').to_s.include?("http://services.autouplinktech.com/admin/mainoptions.cfm")).to be false
 	end
 
-	it "can locate a vehicle, once logged in" do
-		AutoUplink.new.login(user_name, password)
-		# expect(aul_scraper.find_vehicle(vehicle)).to_not raise_error
-	end
+end
 
+describe '#produce_id_matrix' do
+
+	it "outputs an array of hashes given the right dealer credentials"
+
+	it "returns an array of hashes containing stock_number and aul_id"
 
 end
