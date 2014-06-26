@@ -89,7 +89,7 @@ class AutoUplink < Mechanize
 	# Login to Auto Uplink
 	def login
 		begin
-		    self.get(@@login_url)
+        self.get(@@login_url)
 		    form = self.page.forms.first
 		    form.uid = @@login
 		    form.pid = @@password

@@ -22,6 +22,7 @@ end
 
 describe '#retrieve_vehicle_comments' do
 
+
 end
 
 describe 'update_vehicle_comments' do
