@@ -40,8 +40,20 @@ class AutoUplink < Mechanize
     single_vehicle_editor(aul_id).retrieve_comments_on_edit_page
   end
 
-
-# private
+  # Login to Auto Uplink
+  def login
+    begin
+      self.get(@@login_url)
+      form = self.page.forms.first
+      form.uid = @@login
+      form.pid = @@password
+      self.submit(form)
+    rescue StandardError => e
+      logger = Logger.new(STDERR)
+      logger.error("Could not log into AutoUplink: #{e.message}")
+      return false
+    end
+  end
   
   # returns an AutoUplink instance that is on a given vehicle's edit page
   def self.single_vehicle_editor(aul_id)
@@ -85,20 +97,7 @@ class AutoUplink < Mechanize
     self.page.search('meta').to_s.include?("http://services.autouplinktech.com/admin/mainoptions.cfm")
   end
 
-  # Login to Auto Uplink
-  def login
-    begin
-      self.get(@@login_url)
-      form = self.page.forms.first
-      form.uid = @@login
-      form.pid = @@password
-      self.submit(form)
-    rescue StandardError => e
-      logger = Logger.new(STDERR)
-      logger.error("Could not log into AutoUplink: #{e.message}")
-      return false
-    end
-  end
+
 
   def goto_vehicle_edit_page(aul_id)
     self.get("http://services.autouplinktech.com/admin/iim/InventoryManagement/UsedVeh.cfm?VehicleID=#{aul_id}&Edit=Yes&DealerID=#{@@dealer_id}")
