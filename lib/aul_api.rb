@@ -93,12 +93,11 @@ private
       form.uid = @@login
       form.pid = @@password
       self.submit(form)
-  rescue StandardError => e
-        logger = Logger.new(STDERR)
-        logger.error("Could not log into AutoUplink: #{e.message}")
-        return false
-      end
-
+    rescue StandardError => e
+      logger = Logger.new(STDERR)
+      logger.error("Could not log into AutoUplink: #{e.message}")
+      return false
+    end
   end
 
   def goto_vehicle_edit_page(aul_id)
