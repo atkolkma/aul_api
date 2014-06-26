@@ -40,11 +40,13 @@ class AutoUplink < Mechanize
 		id_matrix
 	end
 
+	# Pulls AutoUplink id and stock number out of a table row and returns them as a hash
 	def id_hash_from_row (vehicle_row)
 		vehicle_entries = vehicle_row.search("td")
 		{:aul_id => Sanitize.clean(vehicle_entries[0].to_s).strip, :stock_number => Sanitize.clean(vehicle_entries[1].to_s).strip}
 	end
 
+	# Determines if a AutoUplink instance is on the main menu page or not
 	def on_main_menu?
 		self.page.search('meta').to_s.include?("http://services.autouplinktech.com/admin/mainoptions.cfm")
 	end
