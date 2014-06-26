@@ -8,13 +8,45 @@ class AutoUplink < Mechanize
 	@@logout_url = "http://services.autouplinktech.com/logout.cfm"
 	@@main_menu_url = "http://services.autouplinktech.com/admin/mainoptions.cfm"
 	@@comments_generator_url = "http://services.autouplinktech.com/admin/iim/navigation/home.cfm?CommentsGenerator=yes"
+	@@dealer_id = "9529"
+
+	@@login = ''
+	@@passowrd = ''
+
 
 	# Outputs an array of hashes, one for each vehicle,
 	# containing :aul_id and :stock_number
-	def self.id_matrix(login, password)
+	def self.set_credentials(login, password)
+		@@login = login
+		@@password = password
+	end
+
+	def self.id_matrix
 		aul_scraper = AutoUplink.new
-		aul_scraper.login(login, password)
+		aul_scraper.login
 		aul_scraper.produce_id_matrix
+	end
+
+	# Update the comments of a single vehicle with AutoUplink id of aul_id
+	def self.update_vehicle_comments(aul_id, comments)
+		single_vehicle_editor(aul_id).update_comments_on_edit_page(comments)
+	end
+
+	# Retrieve the comments of a single vehicle with AutoUplink id of aul_id
+	def self.retrieve_vehicle_comments(aul_id)
+		single_vehicle_editor(aul_id).retrieve_comments_on_edit_page
+	end
+
+
+
+# private
+	
+	# returns an AutoUplink instance that is on a given vehicle's edit page
+	def self.single_vehicle_editor(aul_id)
+		aul_scraper = AutoUplink.new
+		aul_scraper.login
+		aul_scraper.goto_vehicle_edit_page(aul_id)
+		aul_scraper
 	end
 
 	# Create a Mechanize agent
@@ -52,12 +84,12 @@ class AutoUplink < Mechanize
 	end
 
 	# Login to Auto Uplink
-	def login (user, password)
+	def login
 		begin
 		    self.get(@@login_url)
 		    form = self.page.forms.first
-		    form.uid = user
-		    form.pid = password
+		    form.uid = @@login
+		    form.pid = @@password
 		    self.submit(form)
 		rescue StandardError => e
 	    	logger = Logger.new(STDERR)
@@ -67,7 +99,20 @@ class AutoUplink < Mechanize
 
 	end
 
+	def goto_vehicle_edit_page(aul_id)
+		self.get("http://services.autouplinktech.com/admin/iim/InventoryManagement/UsedVeh.cfm?VehicleID=#{aul_id}&Edit=Yes&DealerID=#{@@dealer_id}")
+	end
 
+	def update_comments_on_edit_page(comments)
+		form = self.page.forms.first
+		form['DealerOptionBox'] = comments
+		self.submit(form)
+	end
+
+	def retrieve_comments_on_edit_page
+		form = self.page.forms.first
+		form['DealerOptionBox']
+	end
 
 
 end
