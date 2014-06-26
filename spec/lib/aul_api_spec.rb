@@ -5,16 +5,31 @@ require 'yaml'
 fixtures = YAML::load_file(File.join(__dir__, 'fixtures.yml'))
 credentials = YAML::load_file(File.join(__dir__, 'credentials.yml'))
 
-user_name = credentials["user_name"]
+login = credentials["login"]
 password = credentials["password"]
 dealer_id = credentials["dealer_id"]
 
 #  CLASS AND PUBLIC METHOD TESTS
 ######################################
 
-AutoUplink.set_credentials(dealer_id, user_name, password)
+AutoUplink.set_credentials({dealer_id: dealer_id, login: login, password: password})
 
 puts AutoUplink.retrieve_vehicle_comments('37437175')
+
+describe '#id_matrix' do
+
+end
+
+describe '#retrieve_vehicle_comments' do
+
+end
+
+describe 'update_vehicle_comments' do
+
+end
+
+
+
 
 
 #  PRIVATE METHOD TESTS

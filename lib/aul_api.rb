@@ -16,11 +16,14 @@ class AutoUplink < Mechanize
 
 	# Outputs an array of hashes, one for each vehicle,
 	# containing :aul_id and :stock_number
-	def self.set_credentials(dealer_id, login, password)
-		@@login = login
-		@@password = password
+	def self.set_credentials(credentials_hash)
+		@@dealer_id = credentials_hash[:dealer_id]
+		@@login = credentials_hash[:login]
+		@@password = credentials_hash[:password]
 	end
 
+	# Outputs an array of hashes, one for each vehicle, containing :aul_id and :stock_number
+	# Cache this data somewhere! Don't call it for each vehicle's aul_id !
 	def self.id_matrix
 		aul_scraper = AutoUplink.new
 		aul_scraper.login
