@@ -15,17 +15,31 @@ describe AutoUplink do
 	end
 
 	it "can log into AUL given working credentials" do
-		# .uri.to_s doesn't work here. You must search meta tag to get the redirected page.
-		expect(AutoUplink.new.login(user_name, password).search('meta').to_s.include?("http://services.autouplinktech.com/admin/mainoptions.cfm")).to be true
-		expect(AutoUplink.new.login("bad_username", "useless_password").search('meta').to_s.include?("http://services.autouplinktech.com/admin/mainoptions.cfm")).to be false
+		#login with correct credentials should bring you to main menu
+		aul_scraper = AutoUplink.new
+		aul_scraper.login(user_name, password)
+		expect(aul_scraper.on_main_menu?).to be true
+
+		#login with bogus credentials should not work
+		aul_scraper = AutoUplink.new
+		aul_scraper.login("bad_username", "useless_password")
+		expect(aul_scraper.on_main_menu?).to be false
 	end
 
 end
 
 describe '#produce_id_matrix' do
 
-	it "outputs an array of hashes given the right dealer credentials"
-
-	it "returns an array of hashes containing stock_number and aul_id"
+	it "outputs an array of hashes containing stock_number and aul_id" do
+		aul_scraper = AutoUplink.new
+		aul_scraper.login(user_name, password)
+		id_matrix = aul_scraper.produce_id_matrix
+		expect(id_matrix).to be_a(Array)
+		expect(id_matrix[0]).to be_a(Hash)
+		expect(id_matrix[0]["stock_number"]).to be_a(String)
+		expect(id_matrix[0]["aul_id"]).to be_a(String)
+		expect(id_matrix[0]["stock_number"].length).to be > 0
+		expect(id_matrix[0]["aul_id"].length).to be > 0
+	end
 
 end
