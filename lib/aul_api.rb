@@ -8,15 +8,15 @@ class AutoUplink < Mechanize
 	@@logout_url = "http://services.autouplinktech.com/logout.cfm"
 	@@main_menu_url = "http://services.autouplinktech.com/admin/mainoptions.cfm"
 	@@comments_generator_url = "http://services.autouplinktech.com/admin/iim/navigation/home.cfm?CommentsGenerator=yes"
-	@@dealer_id = "9529"
 
+	@@dealer_id = ''
 	@@login = ''
 	@@passowrd = ''
 
 
 	# Outputs an array of hashes, one for each vehicle,
 	# containing :aul_id and :stock_number
-	def self.set_credentials(login, password)
+	def self.set_credentials(dealer_id, login, password)
 		@@login = login
 		@@password = password
 	end
