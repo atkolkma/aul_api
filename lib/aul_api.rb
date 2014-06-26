@@ -41,7 +41,7 @@ class AutoUplink < Mechanize
   end
 
 
-private
+# private
   
   # returns an AutoUplink instance that is on a given vehicle's edit page
   def self.single_vehicle_editor(aul_id)
@@ -68,8 +68,8 @@ private
     id_matrix = []
 
     vehicle_row.each do |n|
-    id_matrix.push(id_hash_from_row(n))
-  end
+      id_matrix.push(id_hash_from_row(n))
+    end
 
     id_matrix
   end

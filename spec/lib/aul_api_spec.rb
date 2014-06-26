@@ -14,21 +14,39 @@ dealer_id = credentials["dealer_id"]
 
 AutoUplink.set_credentials({dealer_id: dealer_id, login: login, password: password})
 
-puts AutoUplink.retrieve_vehicle_comments('37437175')
+describe AutoUplink do
 
-describe '#id_matrix' do
+  describe '.id_matrix' do
+    it "outputs an array of hashes with stock numbers and AutoUplink ids" do
+		  test_matrix = AutoUplink.id_matrix
+		  expect(test_matrix[1][:stock_number]).to be_a(String)
+		  expect(test_matrix[1][:aul_id]).to be_a(String)
+		  expect(test_matrix[1][:stock_number].length).to be > 0
+		  expect(test_matrix[1][:aul_id].length).to be > 0
+    end
+  end
+
+	describe '.retrieve_vehicle_comments' do
+    it "outputs a String if the method arguments match an correct AutoUplink id" do
+      expect(AutoUplink.retrieve_vehicle_comments(fixtures["vehicle1"]["aul_id"])).to be_a(String)
+    end
+	end
+
+	
+  # Destructive. But should revert DB back to original state
+  describe '.update_vehicle_comments' do
+    it "updates a vehicle's comments in the AutoUplink databse" do
+      original_comment = AutoUplink.retrieve_vehicle_comments(fixtures["vehicle1"]["aul_id"])
+      new_comment = original_comment + '.'
+      AutoUplink.update_vehicle_comments(fixtures["vehicle1"]["aul_id"], new_comment)
+      expect(AutoUplink.retrieve_vehicle_comments(fixtures["vehicle1"]["aul_id"])).to eq(new_comment)
+
+      # To fix the comment in the database
+      AutoUplink.update_vehicle_comments(fixtures["vehicle1"]["aul_id"], original_comment)
+    end
+  end
 
 end
-
-describe '#retrieve_vehicle_comments' do
-
-
-end
-
-describe 'update_vehicle_comments' do
-
-end
-
 
 
 
