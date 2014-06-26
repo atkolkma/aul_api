@@ -9,6 +9,14 @@ class AutoUplink < Mechanize
 	@@main_menu_url = "http://services.autouplinktech.com/admin/mainoptions.cfm"
 	@@comments_generator_url = "http://services.autouplinktech.com/admin/iim/navigation/home.cfm?CommentsGenerator=yes"
 
+	# Outputs an array of hashes, one for each vehicle,
+	# containing :aul_id and :stock_number
+	def self.id_matrix(login, password)
+		aul_scraper = AutoUplink.new
+		aul_scraper.login(login, password)
+		aul_scraper.produce_id_matrix
+	end
+
 	# Create a Mechanize agent
 	def initialize
 		super
@@ -17,7 +25,8 @@ class AutoUplink < Mechanize
 		@redirect_ok = true
 	end
 
-	# Outputs an array of 
+	# If logged in, outputs an array of hashes, one for each vehicle, 
+	# containing :aul_id and :stock_number
 	def produce_id_matrix
 		self.get(@@comments_generator_url)
 		self.page.frame_with(:name => 'bottom').click
@@ -33,7 +42,7 @@ class AutoUplink < Mechanize
 
 	def id_hash_from_row (vehicle_row)
 		vehicle_entries = vehicle_row.search("td")
-		{:feed_id => Sanitize.clean(vehicle_entries[0].to_s).strip, :stock_number => Sanitize.clean(vehicle_entries[1].to_s).strip}
+		{:aul_id => Sanitize.clean(vehicle_entries[0].to_s).strip, :stock_number => Sanitize.clean(vehicle_entries[1].to_s).strip}
 	end
 
 	def on_main_menu?

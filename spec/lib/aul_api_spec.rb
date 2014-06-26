@@ -34,12 +34,10 @@ describe '#produce_id_matrix' do
 		aul_scraper = AutoUplink.new
 		aul_scraper.login(user_name, password)
 		id_matrix = aul_scraper.produce_id_matrix
-		expect(id_matrix).to be_a(Array)
-		expect(id_matrix[0]).to be_a(Hash)
-		expect(id_matrix[0]["stock_number"]).to be_a(String)
-		expect(id_matrix[0]["aul_id"]).to be_a(String)
-		expect(id_matrix[0]["stock_number"].length).to be > 0
-		expect(id_matrix[0]["aul_id"].length).to be > 0
+		expect(id_matrix[1][:stock_number]).to be_a(String)
+		expect(id_matrix[1][:aul_id]).to be_a(String)
+		expect(id_matrix[1][:stock_number].length).to be > 0
+		expect(id_matrix[1][:aul_id].length).to be > 0
 	end
 
 end
