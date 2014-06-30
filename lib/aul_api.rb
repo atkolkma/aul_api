@@ -8,13 +8,8 @@ require 'auto_uplink/export_data'
 class AutoUplink < Mechanize
 
   include Navigate
-  extend Navigate::ClassMethods
-  
   include ImportData
-  extend ImportData::ClassMethods  
-
   include ExportData
-  extend ExportData::ClassMethods
 
   # Create a Mechanize agent
   def initialize

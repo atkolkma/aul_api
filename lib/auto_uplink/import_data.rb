@@ -1,5 +1,9 @@
 module ImportData
 
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
   module ClassMethods
     # returns an AutoUplink instance that is on a given vehicle's edit page
     def single_vehicle_editor(aul_id)

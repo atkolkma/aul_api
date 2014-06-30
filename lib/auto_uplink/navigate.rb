@@ -10,6 +10,10 @@ module Navigate
   @@password = ''
 
 
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
   module ClassMethods
     # Outputs an array of hashes, one for each vehicle,
     # containing :aul_id and :stock_number

@@ -1,5 +1,9 @@
 module ExportData
 
+  def self.included(base)
+    base.extend(ClassMethods)
+  end
+
   module ClassMethods
     # Outputs an array of hashes, one for each vehicle, containing :aul_id and :stock_number
     # Cache this data somewhere! Don't call it for each vehicle's aul_id !
